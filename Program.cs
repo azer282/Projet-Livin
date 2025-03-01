@@ -1,3 +1,4 @@
+//VISUALISATION DU GRAPH
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -116,7 +117,7 @@ public static class Program
     public static void Main()
     {
         Graphe graphe = new Graphe();
-        graphe.LoadFromMtxFile("C:\\Users\\augus\\Desktop\\Augustin\\ESILV A2\\S2\\données\\soc-karate.mtx");
+        graphe.LoadFromMtxFile("C:\\Users\\augus\\Desktop\\Augustin\\ESILV A2\\S2\\donnÃ©es\\soc-karate.mtx");
         graphe.SetNodePositions(800, 600);
 
         Application.EnableVisualStyles();
