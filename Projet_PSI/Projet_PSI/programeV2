@@ -1,0 +1,28 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Graphe<int> graphe = new Graphe<int>();
+
+        // Ajouter des nœuds
+        Noeud n1 = new Noeud(1);
+        Noeud n2 = new Noeud(2);
+        Noeud n3 = new Noeud(3);
+        graphe.AjouterNoeud(n1);
+        graphe.AjouterNoeud(n2);
+        graphe.AjouterNoeud(n3);
+
+        // Ajouter des liens
+        graphe.AjouterLien(n1, n2);
+        graphe.AjouterLien(n2, n3);
+        graphe.AjouterLien(n3, n1);
+
+        // Générer l’image
+        string filePath = "graphe.png";
+        GraphVisualizer.GenerateGraphImage(graphe, filePath);
+
+        Console.WriteLine($"Image du graphe générée : {filePath}");
+    }
+}
