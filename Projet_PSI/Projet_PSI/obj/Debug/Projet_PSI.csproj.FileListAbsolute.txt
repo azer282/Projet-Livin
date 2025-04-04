@@ -1,0 +1,7 @@
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\obj\Debug\Projet_PSI.csproj.AssemblyReference.cache
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\obj\Debug\Projet_PSI.csproj.CoreCompileInputs.cache
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\bin\Debug\Projet_PSI.exe.config
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\bin\Debug\Projet_PSI.exe
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\bin\Debug\Projet_PSI.pdb
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\obj\Debug\Projet_PSI.exe
+C:\Users\Marin.Monjalous\source\repos\Projet_PSI\Projet_PSI\obj\Debug\Projet_PSI.pdb
