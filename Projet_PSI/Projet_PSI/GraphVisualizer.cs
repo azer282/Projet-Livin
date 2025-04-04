@@ -1,81 +1,46 @@
-using SkiaSharp;
-using SkiaSharp.Views.Desktop;
-using SkiaSharp.Views.WPF;
 using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
+using System.Drawing;
+using System.Drawing.Imaging;
 
-namespace Projet_PSI
+public class GraphVisualizer
 {
-    public class GraphVisualizer : SKElement
+    public static void GenerateGraphImage(Graphe<int> graphe, string filePath)
     {
-        private Graphe<int> graphe;
-        private Dictionary<int, SKPoint> nodePositions;
+        int width = 800, height = 600;
+        Random rand = new Random();
 
-        public GraphVisualizer(Graphe<int> graphe)
+        using (Bitmap bitmap = new Bitmap(width, height))
+        using (Graphics g = Graphics.FromImage(bitmap))
+        using (Pen edgePen = new Pen(Color.Black, 2))
+        using (Brush nodeBrush = new SolidBrush(Color.Blue))
         {
-            this.graphe = graphe;
-            this.PaintSurface += OnPaintSurface;
-            GenerateNodePositions();
-        }
+            g.Clear(Color.White);
 
-        private void GenerateNodePositions()
-        {
-            nodePositions = new Dictionary<int, SKPoint>();
-            Random rand = new Random();
-            int canvasWidth = 600;
-            int canvasHeight = 400;
-
+            // Générer des positions aléatoires pour les nœuds
+            var nodePositions = new Dictionary<int, Point>();
             foreach (var noeud in graphe.Noeuds)
             {
-                float x = rand.Next(50, canvasWidth - 50);
-                float y = rand.Next(50, canvasHeight - 50);
-                nodePositions[noeud.identite] = new SKPoint(x, y);
+                nodePositions[noeud.Id] = new Point(rand.Next(50, width - 50), rand.Next(50, height - 50));
             }
-        }
 
-        private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
-        {
-            var canvas = e.Surface.Canvas;
-            canvas.Clear(SKColors.White);
-
-            using (var edgePaint = new SKPaint { Color = SKColors.Black, StrokeWidth = 3 })
-            using (var nodePaint = new SKPaint { Color = SKColors.Blue, IsAntialias = true })
-            using (var textPaint = new SKPaint { Color = SKColors.Black, TextSize = 20, IsAntialias = true })
+            // Dessiner les arêtes
+            foreach (var lien in graphe.Liens)
             {
-                // Dessiner les arêtes
-                foreach (var noeud in graphe.Noeuds)
-                {
-                    foreach (var voisin in noeud.voisins)
-                    {
-                        SKPoint start = nodePositions[noeud.identite];
-                        SKPoint end = nodePositions[voisin.Item1.identite];
-                        canvas.DrawLine(start, end, edgePaint);
-                    }
-                }
-
-                // Dessiner les nœuds
-                foreach (var noeud in graphe.Noeuds)
-                {
-                    SKPoint position = nodePositions[noeud.identite];
-                    canvas.DrawCircle(position, 20, nodePaint);
-                    canvas.DrawText(noeud.identite.ToString(), position.X - 10, position.Y - 30, textPaint);
-                }
+                Point p1 = nodePositions[lien.Source.Id];
+                Point p2 = nodePositions[lien.Destination.Id];
+                g.DrawLine(edgePen, p1, p2);
             }
-        }
-    }
 
-    public class GraphWindow : Window
-    {
-        public GraphWindow(Graphe<int> graphe)
-        {
-            Title = "Visualisation du Graphe";
-            Width = 650;
-            Height = 450;
+            // Dessiner les nœuds
+            foreach (var noeud in graphe.Noeuds)
+            {
+                Point p = nodePositions[noeud.Id];
+                g.FillEllipse(nodeBrush, p.X - 10, p.Y - 10, 20, 20);
+                g.DrawString(noeud.Id.ToString(), new Font("Arial", 12), Brushes.Black, p.X + 5, p.Y + 5);
+            }
 
-            var skElement = new GraphVisualizer(graphe);
-            Content = skElement;
+            bitmap.Save(filePath, ImageFormat.Png);
         }
     }
 }
+
