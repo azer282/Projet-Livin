@@ -1,27 +1,62 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Globalization;
 
 namespace Projet_PSI
 {
-    internal class Noeud
+    public class Noeud<T> where T : IEquatable<T>
     {
-        public int identite;
-        public List<Noeud> voisins;
-        public Noeud(int identite)
+        public T identite;
+        public string Nom { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public List<(Noeud<T> voisin, int t)> voisins;
+
+        public Noeud(T identite, string nom = null)
         {
             this.identite = identite;
-            this.voisins = new List<Noeud>();
+            this.Nom = string.IsNullOrWhiteSpace(nom) ? identite?.ToString() : nom.Trim();
+            if (string.IsNullOrWhiteSpace(this.Nom))
+            {
+                this.Nom = "Unnamed Node";
+            }
+            this.Longitude = double.NaN;
+            this.Latitude = double.NaN;
+            this.voisins = new List<(Noeud<T>, int t)>();
         }
-        public int Identite
+
+        public bool HasValidCoordinates => !double.IsNaN(this.Longitude) && !double.IsNaN(this.Latitude);
+
+        public override bool Equals(object obj)
         {
-            get { return identite; }
+            return obj is Noeud<T> otherNode &&
+                   EqualityComparer<T>.Default.Equals(this.identite, otherNode.identite);
         }
-        public List<Noeud> Voisins
+
+        public override int GetHashCode()
         {
-            get { return voisins; }
+            return EqualityComparer<T>.Default.GetHashCode(this.identite);
+        }
+
+        public static bool operator ==(Noeud<T> left, Noeud<T> right)
+        {
+            if (ReferenceEquals(left, null))
+            {
+                return ReferenceEquals(right, null);
+            }
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Noeud<T> left, Noeud<T> right)
+        {
+            return !(left == right);
+        }
+
+        public override string ToString()
+        {
+            string coordStr = HasValidCoordinates ? $" ({this.Longitude:F6}, {this.Latitude:F6})" : " (No Coords)";
+            return $"[{this.identite}] {this.Nom}{coordStr}";
         }
     }
 }
-
